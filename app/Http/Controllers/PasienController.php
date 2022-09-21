@@ -13,8 +13,13 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $myName = "budi";
-        return view('pasien_index', compact('myName'));
+        $q = request('q');
+        if ($q == '') {
+            $models = \App\Models\Pasien::latest()->paginate(50);
+        } else {
+            $models = \App\Models\Pasien::where('nama', 'like', '%' . $q . '%')->paginate(50);
+        }
+        return view('pasien_index', compact('models'));
     }
 
     /**
@@ -24,9 +29,10 @@ class PasienController extends Controller
      */
     public function create()
     {
-        $data['nama'] = "budi";
-        $data['umur'] = 20;
-        $data['hobi'] = "makan";
+        $data['model'] = new \App\Models\Pasien();
+        $data['method'] = 'POST';
+        $data['route'] = 'pasien.store';
+        $data['namaTombol'] = 'SIMPAN';
         return view('pasien_form', $data);
     }
 
@@ -38,7 +44,15 @@ class PasienController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $requestData = $request->validate([
+            'no_pasien' => 'required|unique:pasiens,no_pasien',
+            'nama' => 'required',
+            'umur' => 'required|numeric',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+        ]);
+        \App\Models\Pasien::create($requestData);
+        flash('Data sudah disimpan')->success();
+        return back();
     }
 
     /**
@@ -72,7 +86,15 @@ class PasienController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $requestData = $request->validate([
+            'no_pasien' => 'required|unique:pasiens,no_pasien',
+            'nama' => 'required',
+            'umur' => 'required|numeric',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+        ]);
+        \App\Models\Pasien::create($requestData);
+        flash('Data sudah disimpan')->success();
+        return back();
     }
 
     /**
