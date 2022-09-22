@@ -63,7 +63,8 @@ class PasienController extends Controller
      */
     public function show($id)
     {
-        //
+        $model = \App\Models\Pasien::findOrFail($id);
+        return view('pasien_show', compact('model'));
     }
 
     /**
@@ -74,7 +75,11 @@ class PasienController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['model'] = \App\Models\Pasien::findOrFail($id);
+        $data['method'] = 'PUT';
+        $data['route'] = ['pasien.update', $id];
+        $data['namaTombol'] = 'UPDATE';
+        return view('pasien_form', $data);
     }
 
     /**
@@ -87,12 +92,12 @@ class PasienController extends Controller
     public function update(Request $request, $id)
     {
         $requestData = $request->validate([
-            'no_pasien' => 'required|unique:pasiens,no_pasien',
+            'no_pasien' => 'required|unique:pasiens,no_pasien,' . $id,
             'nama' => 'required',
             'umur' => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
         ]);
-        \App\Models\Pasien::create($requestData);
+        \App\Models\Pasien::where('id', $id)->update($requestData);
         flash('Data sudah disimpan')->success();
         return back();
     }
@@ -105,6 +110,8 @@ class PasienController extends Controller
      */
     public function destroy($id)
     {
-        //
+        \App\Models\Pasien::destroy($id);
+        flash('Data sudah dihapus')->success();
+        return back();
     }
 }
