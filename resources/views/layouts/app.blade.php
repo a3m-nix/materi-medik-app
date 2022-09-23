@@ -35,11 +35,16 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pasien.index') }}">
+                            <a class="nav-link {{ request()->is('pasien*') ? 'active' : '' }}"
+                                href="{{ route('pasien.index') }}">
                                 Data Pasien</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('daftar.index') }}">
+                                Pendaftaran
+                            </a>
+                        </li>
                     </ul>
-
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->

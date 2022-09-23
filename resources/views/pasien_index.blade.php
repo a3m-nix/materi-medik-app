@@ -3,13 +3,27 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">DATA PASIEN</div>
                     <div class="card-body">
-                        <a href="{{ route('pasien.create') }}" class="btn btn-primary btn-sm">
-                            Tambah Data
-                        </a>
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <a href="{{ route('pasien.create') }}" class="btn btn-primary btn-sm">
+                                    Tambah Data
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                {!! Form::open(['url' => url()->current(), 'method' => 'GET']) !!}
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Cari Nama"
+                                        value="{{ request('q') }}" />
+
+                                    <button type="submit" class="btn btn-primary">Cari</button>
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -37,7 +51,8 @@
                                                 'method' => 'delete',
                                                 'onsubmit' => 'return confirm("Yakin mau dihapus?")',
                                             ]) !!}
-                                            <a href="{{ route('pasien.show', $item->id) }}" class="btn btn-info btn-sm ml-2">
+                                            <a href="{{ route('pasien.show', $item->id) }}"
+                                                class="btn btn-info btn-sm ml-2">
                                                 Detail
                                             </a>
                                             <a href="{{ route('pasien.edit', $item->id) }}"
