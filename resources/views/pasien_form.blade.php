@@ -10,9 +10,15 @@
                         {!! Form::model($model, [
                             'method' => $method,
                             'route' => $route,
+                            'files' => true,
                         ]) !!}
 
                         <div class="form-group">
+                            <label for="foto">Gambar Pasien</label>
+                            {!! Form::file('foto', ['class' => 'form-control']) !!}
+                            <span class="text-danger">{{ $errors->first('foto') }}</span>
+                        </div>
+                        <div class="form-group mt-3">
                             <label for="no_pasien">Nomor Pasien</label>
                             {!! Form::text('no_pasien', null, ['class' => 'form-control', 'autofocus']) !!}
                             <span class="text-danger">{{ $errors->first('no_pasien') }}</span>
@@ -28,7 +34,7 @@
                             <span class="text-danger">{{ $errors->first('umur') }}</span>
                         </div>
                         <div class="form-check mt-3">
-                            {!! Form::radio('jenis_kelamin', 'laki-laki', true, [
+                            {!! Form::radio('jenis_kelamin', 'laki-laki', null, [
                                 'id' => 'jenis_kelamin_lk',
                                 'class' => 'form-check-input',
                             ]) !!}
@@ -37,7 +43,7 @@
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            {!! Form::radio('jenis_kelamin', 'perempuan', false, [
+                            {!! Form::radio('jenis_kelamin', 'perempuan', null, [
                                 'id' => 'jenis_kelamin_pr',
                                 'class' => 'form-check-input',
                             ]) !!}

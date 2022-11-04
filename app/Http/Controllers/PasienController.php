@@ -49,8 +49,15 @@ class PasienController extends Controller
             'nama' => 'required',
             'umur' => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:5048',
         ]);
-        \App\Models\Pasien::create($requestData);
+        $pathFoto = null;
+        if ($request->hasFile('foto')) {
+            $pathFoto = $request->file('foto')->store('public');
+        }
+        $model = new \App\Models\Pasien($requestData);
+        $model->foto = $pathFoto;
+        $model->save();
         flash('Data sudah disimpan')->success();
         return back();
     }

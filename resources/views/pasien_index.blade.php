@@ -9,7 +9,7 @@
                     <div class="card-body">
                         <div class="row mb-5">
                             <div class="col-md-6">
-                                <a href="{{ route('pasien.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ url('pasien/create') }}" class="btn btn-primary btn-sm">
                                     Tambah Data
                                 </a>
                             </div>
@@ -41,7 +41,13 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->no_pasien }}</td>
-                                        <td>{{ $item->nama }}</td>
+                                        <td>
+                                            @if ($item->foto)
+                                                <img src="{{ \Storage::url($item->foto) }}" width="50" />
+                                                <a href="{{ \Storage::url($item->foto) }}">Download Foto</a>
+                                            @endif
+                                            {{ $item->nama }}
+                                        </td>
                                         <td>{{ $item->umur }}</td>
                                         <td>{{ $item->jenis_kelamin }}</td>
                                         <td>{{ $item->created_at }}</td>
