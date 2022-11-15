@@ -13,6 +13,9 @@
                             'files' => true,
                         ]) !!}
 
+                        @if ($model->foto != null)
+                            <img src="{!! Storage::url($model->foto) !!}" alt="">
+                        @endif
                         <div class="form-group">
                             <label for="foto">Gambar Pasien</label>
                             {!! Form::file('foto', ['class' => 'form-control']) !!}
@@ -20,9 +23,16 @@
                         </div>
                         <div class="form-group mt-3">
                             <label for="no_pasien">Nomor Pasien</label>
+                            {!! Form::file('foto', ['class' => 'form-control']) !!}
+                            <span class="text-danger">{{ $errors->first('foto') }}</span>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="no_pasien">Nomor Pasien</label>
                             {!! Form::text('no_pasien', null, ['class' => 'form-control', 'autofocus']) !!}
                             <span class="text-danger">{{ $errors->first('no_pasien') }}</span>
                         </div>
+
                         <div class="form-group mt-3">
                             <label for="nama">Nama</label>
                             {!! Form::text('nama', null, ['class' => 'form-control']) !!}

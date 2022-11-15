@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PasienService;
 use Illuminate\Http\Request;
 
 class PasienController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('auth.admin')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +55,11 @@ class PasienController extends Controller
             'nama' => 'required',
             'umur' => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+<<<<<<< Updated upstream
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:5048',
+=======
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:5000',
+>>>>>>> Stashed changes
         ]);
         $pathFoto = null;
         if ($request->hasFile('foto')) {
@@ -68,9 +78,14 @@ class PasienController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PasienService $pasienService, $id)
     {
-        $model = \App\Models\Pasien::findOrFail($id);
+
+        try {
+            $model = $pasienService->findById($id);
+        } catch (\Exception $ex) {
+            abort(404, 'Data tidak ada');
+        }
         return view('pasien_show', compact('model'));
     }
 
@@ -103,8 +118,19 @@ class PasienController extends Controller
             'nama' => 'required',
             'umur' => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
         ]);
-        \App\Models\Pasien::where('id', $id)->update($requestData);
+        //cari data yang akan diubah
+        $model = \App\Models\Pasien::findOrFail($id);
+        //isi data model dengan data yang akan diupdate
+        $model->fill($requestData);
+        if ($request->hasFile('foto')) {
+            //hapus foto lama
+            \Storage::delete($model->foto);
+            $pathFoto = $request->file('foto')->store('public');
+            $model->foto = $pathFoto;
+        }
+        $model->save();
         flash('Data sudah disimpan')->success();
         return back();
     }
