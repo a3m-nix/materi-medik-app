@@ -19,11 +19,9 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $q = request('q');
-        if ($q == '') {
-            $models = \App\Models\Pasien::latest()->paginate(50);
-        } else {
-            $models = \App\Models\Pasien::where('nama', 'like', '%' . $q . '%')->paginate(50);
+        $models = \App\Models\Pasien::latest()->paginate(50);
+        if (request()->wantsJson()) {
+            return response()->json($models);
         }
         return view('pasien_index', compact('models'));
     }
@@ -55,11 +53,7 @@ class PasienController extends Controller
             'nama' => 'required',
             'umur' => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
-<<<<<<< Updated upstream
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:5048',
-=======
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:5000',
->>>>>>> Stashed changes
         ]);
         $pathFoto = null;
         if ($request->hasFile('foto')) {
@@ -68,6 +62,9 @@ class PasienController extends Controller
         $model = new \App\Models\Pasien($requestData);
         $model->foto = $pathFoto;
         $model->save();
+        if (request()->wantsJson()) {
+            return response()->json($model);
+        }
         flash('Data sudah disimpan')->success();
         return back();
     }
@@ -143,7 +140,11 @@ class PasienController extends Controller
      */
     public function destroy($id)
     {
-        \App\Models\Pasien::destroy($id);
+        $pasien = \App\Models\Pasien::findOrFail($id);
+        if ($pasien->daftar->count() >= 1) {
+            flash('Data tidak bisa dihapus karena sudah ada transaksi')->error();
+            return back();
+        }
         flash('Data sudah dihapus')->success();
         return back();
     }

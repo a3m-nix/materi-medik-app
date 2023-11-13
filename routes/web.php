@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DaftarController;
+use App\Http\Controllers\LaporanDaftarController;
+use App\Http\Controllers\LaporanPasienController;
 use App\Http\Controllers\PasienController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,18 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-<<<<<<< Updated upstream
-Route::middleware('auth')->group(function () {
+ 
+
+Route::middleware(['auth'])->group(function () {
     Route::resource('pasien', PasienController::class);
     Route::resource('daftar', DaftarController::class);
-});
-=======
-Route::middleware(['auth'])->group(function () {
-    Route::resource('pasien', PasienController::class)->except('destroy');
-});
-
-Route::middleware(['auth', 'auth.admin'])->group(function () {
-    Route::resource('pasien', PasienController::class)->only('destroy');
+    Route::resource('laporanpasien', LaporanPasienController::class);
+    Route::resource('laporandaftar', LaporanDaftarController::class);
 });
 
 
@@ -36,7 +33,6 @@ Route::get('profil', [App\Http\Controllers\ProfilController::class, 'index']);
 Route::get('profil/create', [App\Http\Controllers\ProfilController::class, 'create']);
 
 Route::get('profil/{nama}/{id}/edit', [App\Http\Controllers\ProfilController::class, 'edit']);
->>>>>>> Stashed changes
 
 Route::get('/', function () {
     return view('welcome');

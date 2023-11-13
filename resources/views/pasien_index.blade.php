@@ -1,15 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.app_nice')
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">DATA PASIEN</div>
                     <div class="card-body">
                         <div class="row mb-5">
                             <div class="col-md-6">
-                                <a href="{{ url('pasien/create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('pasien.create') }}" class="btn btn-primary btn-sm">
                                     Tambah Data
                                 </a>
                             </div>

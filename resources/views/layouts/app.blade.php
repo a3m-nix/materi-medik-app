@@ -34,25 +34,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-<<<<<<< Updated upstream
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('pasien*') ? 'active' : '' }}"
-                                href="{{ route('pasien.index') }}">
-                                Data Pasien</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('daftar.index') }}">
-                                Pendaftaran
-                            </a>
-                        </li>
-=======
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('pasien.index') }}">
                                     Data Pasien</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('daftar.index') }}">
+                                    Data Pendaftaran</a>
+                            </li>
                         @endauth
->>>>>>> Stashed changes
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">

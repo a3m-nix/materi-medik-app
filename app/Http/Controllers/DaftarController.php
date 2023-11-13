@@ -14,13 +14,8 @@ class DaftarController extends Controller
      */
     public function index()
     {
-        $q = request('q');
-        if ($q == '') {
-            $models = \App\Models\Pasien::latest()->paginate(50);
-        } else {
-            $models = \App\Models\Pasien::where('nama', 'like', '%' . $q . '%')->paginate(50);
-        }
-        return view('pasien_index', compact('models'));
+        $models = \App\Models\Daftar::with('pasien')->latest()->paginate(50);
+        return view('daftar_index', compact('models'));
     }
 
     /**
@@ -30,7 +25,19 @@ class DaftarController extends Controller
      */
     public function create()
     {
-        //
+        $data['pasien'] = \App\Models\Pasien::pluck('nama', 'id');
+        $data['poli'] = [
+            'umum' => 'Umum',
+            'gigi' => 'Gigi',
+            'kandungan' => 'Kandungan',
+            'anak' => 'Anak',
+            'bedah' => 'Bedah',
+        ];
+        $data['model'] = new \App\Models\Daftar();
+        $data['method'] = 'POST';
+        $data['route'] = 'daftar.store';
+        $data['namaTombol'] = 'SIMPAN';
+        return view('daftar_form', $data);
     }
 
     /**
@@ -41,7 +48,18 @@ class DaftarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $requestData = $request->validate([
+            'tanggal_daftar' => 'required',
+            'pasien_id' => 'required',
+            'poli' => 'required',
+            'keluhan' => 'required',
+        ]);
+        $model = new \App\Models\Daftar();
+        $model->fill($requestData);
+        $model->status_daftar = 'baru';
+        $model->save();
+        flash('Data berhasil disimpan')->success();
+        return back();
     }
 
     /**
@@ -50,9 +68,10 @@ class DaftarController extends Controller
      * @param  \App\Models\Daftar  $daftar
      * @return \Illuminate\Http\Response
      */
-    public function show(Daftar $daftar)
+    public function show($id)
     {
-        //
+        $data['daftar'] = \App\Models\Daftar::findOrFail($id);
+        return view('daftar_show', $data);
     }
 
     /**
@@ -61,9 +80,8 @@ class DaftarController extends Controller
      * @param  \App\Models\Daftar  $daftar
      * @return \Illuminate\Http\Response
      */
-    public function edit(Daftar $daftar)
+    public function edit($id)
     {
-        //
     }
 
     /**
@@ -73,9 +91,18 @@ class DaftarController extends Controller
      * @param  \App\Models\Daftar  $daftar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Daftar $daftar)
+    public function update(Request $request, $id)
     {
-        //
+        $requestData = $request->validate([
+            'tindakan' => 'required',
+            'diagnosis' => 'required',
+        ]);
+        $daftar = \App\Models\Daftar::findOrFail($id);
+        $daftar->fill($requestData);
+        $daftar->status_daftar = 'selesai';
+        $daftar->save();
+        flash('Data berhasil disimpan')->success();
+        return back();
     }
 
     /**
@@ -84,8 +111,11 @@ class DaftarController extends Controller
      * @param  \App\Models\Daftar  $daftar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Daftar $daftar)
+    public function destroy($id)
     {
-        //
+        $daftar = \App\Models\Daftar::findOrFail($id);
+        $daftar->delete();
+        flash('Data berhasil dihapus');
+        return back();
     }
 }

@@ -16,12 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-
-        \App\Models\Pasien::factory()->create([
-            'no_pasien' => Str::random(4),
-            'nama' => 'test@example.com',
-            'umur' => 'test@example.com',
-            'jenis_kelamin' => 'test@example.com',
-        ]);
+        \App\Models\Pasien::factory(50)->create();
     }
 }
